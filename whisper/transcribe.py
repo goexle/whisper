@@ -198,7 +198,7 @@ def transcribe(
         initial_prompt_tokens = []
 
     def new_segment(
-        *, start: float, end: float, tokens: torch.Tensor, tokens_probs: list[list[float]], result: DecodingResult
+        *, start: float, end: float, tokens: torch.Tensor, tokens_probs: List[List[float]], result: DecodingResult
     ):
         tokens = tokens.tolist()
         text_tokens = [token for token in tokens if token < tokenizer.eot]
