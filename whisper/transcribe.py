@@ -1,7 +1,7 @@
 import argparse
 import os
 import warnings
-from typing import TYPE_CHECKING, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Optional, Tuple, Union, List
 
 import numpy as np
 import torch
