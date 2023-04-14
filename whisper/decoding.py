@@ -296,7 +296,7 @@ class GreedyDecoder(TokenDecoder):
 
         return tokens, tokens_probs, completed
 
-    def finalize(self, tokens: Tensor, tokens_probs: List, sum_logprobs: Tensor) -> tuple[Tensor, List, List]:
+    def finalize(self, tokens: Tensor, tokens_probs: List, sum_logprobs: Tensor) -> Tuple[Tensor, List, List]:
         # make sure each sequence has at least one EOT token at the end
         tokens = F.pad(tokens, (0, 1), value=self.eot)
         # Pad the tokens_probs as the tokens with eot prob dummy value
@@ -395,7 +395,7 @@ class BeamSearchDecoder(TokenDecoder):
 
         return tokens, tokens_probs, completed
 
-    def finalize(self, preceding_tokens: Tensor, preceding_tokens_prob: List, sum_logprobs: Tensor) -> tuple[List, List, List]:
+    def finalize(self, preceding_tokens: Tensor, preceding_tokens_prob: List, sum_logprobs: Tensor) -> Tuple[List, List, List]:
         # collect all finished sequences, including patience, and add unfinished ones if not enough
         sum_logprobs = sum_logprobs.cpu()
         for i, sequences in enumerate(self.finished_sequences):
