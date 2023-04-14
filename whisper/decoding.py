@@ -118,7 +118,7 @@ class DecodingResult:
     language: str
     language_probs: Optional[Dict[str, float]] = None
     tokens: List[int] = field(default_factory=list)
-    tokens_probs: list[float] = field(default_factory=list)
+    tokens_probs: List[float] = field(default_factory=list)
     text: str = ""
     avg_logprob: float = np.nan
     no_speech_prob: float = np.nan
