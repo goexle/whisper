@@ -1,7 +1,7 @@
 import argparse
 import os
 import warnings
-from typing import TYPE_CHECKING, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Optional, Tuple, Union, List
 
 import numpy as np
 import torch
@@ -198,7 +198,7 @@ def transcribe(
         initial_prompt_tokens = []
 
     def new_segment(
-        *, start: float, end: float, tokens: torch.Tensor, result: DecodingResult
+        *, start: float, end: float, tokens: torch.Tensor, tokens_probs: List[List[float]], result: DecodingResult
     ):
         tokens = tokens.tolist()
         text_tokens = [token for token in tokens if token < tokenizer.eot]
@@ -208,6 +208,7 @@ def transcribe(
             "end": end,
             "text": tokenizer.decode(text_tokens),
             "tokens": tokens,
+            "tokens_probs": tokens_probs,
             "temperature": result.temperature,
             "avg_logprob": result.avg_logprob,
             "compression_ratio": result.compression_ratio,
@@ -271,6 +272,7 @@ def transcribe(
                             start=time_offset + start_timestamp_pos * time_precision,
                             end=time_offset + end_timestamp_pos * time_precision,
                             tokens=sliced_tokens,
+                            tokens_probs=result.tokens_probs[last_slice + 1:current_slice - 1],
                             result=result,
                         )
                     )
@@ -302,6 +304,7 @@ def transcribe(
                     new_segment(
                         start=time_offset,
                         end=time_offset + duration,
+                        tokens_probs=result.tokens_probs,
                         tokens=tokens,
                         result=result,
                     )
